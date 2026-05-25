@@ -1,35 +1,40 @@
 package utils;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import java.time.Duration;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-
-import java.time.Duration;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class DriverFactory {
 
     public static WebDriver initializeDriver(String browser) {
 
-        WebDriver driver;
+        WebDriver driver = null;
 
-        switch (browser.toLowerCase()) {
+        if (browser.equalsIgnoreCase("chrome")) {
 
-            case "firefox":
-                WebDriverManager.firefoxdriver().setup();
-                driver = new FirefoxDriver();
-                break;
+            ChromeOptions options = new ChromeOptions();
 
-            default:
-                WebDriverManager.chromedriver().setup();
-                driver = new ChromeDriver();
-                break;
+            // Required for CI/CD pipeline
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--remote-allow-origins=*");
+            options.addArguments("--window-size=1920,1080");
+
+            // Stability improvements
+            options.addArguments("--disable-extensions");
+            options.addArguments("--disable-infobars");
+            options.addArguments("--start-maximized");
+
+            driver = new ChromeDriver(options);
+
+            driver.manage().timeouts()
+                  .implicitlyWait(Duration.ofSeconds(10));
         }
-
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         return driver;
     }
 }
-
