@@ -64,7 +64,9 @@ mvn clean test
 
 ## 🔄 CI/CD
 
-Integrated with Jenkins for automated test execution.
+GitHub Actions
+Jenkins
+Supports automated headless execution in CI/CD pipelines.
 
 ---
 
@@ -84,7 +86,6 @@ Integrated with Jenkins for automated test execution.
 
 * Docker Selenium Grid
 * Parallel Execution
-* GitHub Actions
 * Allure Reports
 * API Automation Integration
 
